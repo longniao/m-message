@@ -1,5 +1,7 @@
 <script lang="ts">
-import { defineComponent, reactive, PropType, onMounted, ref, onBeforeMount } from 'vue'
+import {
+  defineComponent, reactive, onMounted, ref, onBeforeMount
+} from 'vue'
 import Icon from './icon'
 
 function useTimeout(cb: () => void, time: number) {
@@ -15,7 +17,7 @@ function useTimeout(cb: () => void, time: number) {
 export default defineComponent({
   components: { Icon },
   name: 'm-message',
-  emits: ['close', 'destroy'],
+  emits: ['close', 'destroy', 'collapsed'],
   props: {
     id: String,
     type: {
@@ -23,6 +25,7 @@ export default defineComponent({
       default: 'info'
     },
     title: String,
+    content: String,
     iconURL: String,
     duration: {
       type: Number,
@@ -34,10 +37,9 @@ export default defineComponent({
     width: String,
     className: String,
     wrapperClassName: String,
-    closable: Boolean,
-    content: String
+    closable: Boolean
   },
-  setup (props, { expose }) {
+  setup (props, { expose, emit }) {
     const state = reactive({
       visible: true,
       collapsed: props.isCollapsed,
@@ -61,6 +63,7 @@ export default defineComponent({
 
     const triggerCollapse = () => {
       state.collapsed = !state.collapsed
+      emit('collapsed', state.collapsed)
     }
 
     const handleClose = () => {

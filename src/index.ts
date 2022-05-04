@@ -12,6 +12,6 @@ const withInstall = <T>(t: T, fn: PluginInstallFunction) => {
 }
 
 export default withInstall(message, function (app: App, name: string) {
-  message.setContext(app._context)
+  message._context = app._context
   app.config.globalProperties[name || '$message'] = message
 })
